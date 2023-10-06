@@ -11,7 +11,7 @@ checker = Checker()
 cards = st.text_area(label="Insert here your deck", placeholder="Forest\nIsland\nPlains\nWaste")
 button = st.button(label="Check")
 if button:
-    for card in cards.split(","):
+    for card in cards.split("\n"):
         st.markdown(f"{checker.card_check(card).strip()}")
 
 st.write("by BojukaPod")
