@@ -36,7 +36,7 @@ if manual_inserting_button:
 
 st.divider()
 with st.expander(label="Recent searched cards"):
-    with open("recent_cards.json", "r") as file:
+    with open("recent_cards.json", "r+") as file:
         recent_cards = json.load(file)
     for recent_card in recent_cards[-10:]:
         col1, col2 = st.columns([0.7, 0.3])
