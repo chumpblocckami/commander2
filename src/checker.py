@@ -34,7 +34,7 @@ class Checker:
                 return False, f"{card} is above price treshold (**{min_price}** euro) ❌"
         except Exception as e:
             print(f"{e}")
-            return False, f"{card} not found!"
+            return False, f"{card} not found! {e}"
 
     def check_price_mkm(self, card):
         card_no_punct = card.translate(str.maketrans("", "", string.punctuation))
