@@ -31,7 +31,7 @@ class Checker():
             return False, f"{card} not found!"
 
     def check_text(self, card_name, card_data):
-        texts = card_data["oracle_text"]
+        texts = card_data["oracle_text"] if "oracle_text" in card_data else ""
         for keyword in self.banned_keywords:
             if re.findall(keyword, texts, flags=re.IGNORECASE):
                 return False, f"Card is not legal because has '{keyword}' keyword in text! ❌"
@@ -74,5 +74,4 @@ class Checker():
 
 if __name__ == "__main__":
     checker = Checker()
-    print(checker.deck_check(["Yotian Soldier",
-                              "rampant growth"]))
+    print(checker.deck_check(["vedalken engineer", ""]))

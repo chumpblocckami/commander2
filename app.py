@@ -1,8 +1,16 @@
 import json
+from io import StringIO
 
 import streamlit as st
 
 from src.checker import Checker
+
+st.set_page_config(layout="wide",
+                   page_title="Commander2 - a MTG format by Bojuka Pod",
+                   page_icon="🏆")
+
+if "default" not in st.session_state:
+    st.session_state["default"] = ""
 
 st.markdown("""# COMMANDER 2
 Write a card for each line, then run submit.
@@ -10,15 +18,24 @@ Write a card for each line, then run submit.
 
 checker = Checker()
 
-cards = st.text_area(label="Insert here your deck",
+uploaded_file = st.file_uploader(label="Upload a decklist")
+if uploaded_file is not None:
+    stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+    string_data = stringio.read()
+    st.session_state["default"] = string_data
+
+cards = st.text_area(label="or manually insert cards here",
+                     value=st.session_state["default"],
                      placeholder="Yotian Soldier\nMyr Retriever\nKrark-Clan Ironworks\nTime Sieve")
+
 manual_inserting_button = st.button(label="Check")
 
 if manual_inserting_button:
     if not cards:
         st.error("Please enter some cards!")
     if cards:
-        for card in cards.split("\n"):
+        parsed_cards = [card.strip() for card in cards.split("\n") if card.strip() != None and len(card) > 1]
+        for card in parsed_cards:
             result = checker.card_check(card.strip())
             with open("recent_cards.json", "r+") as file:
                 file_data = json.load(file)
