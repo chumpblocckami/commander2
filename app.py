@@ -41,7 +41,8 @@ if manual_inserting_button:
             if card.strip() is not None and len(card) > 1
         ]
         for card in parsed_cards:
-            result = checker.card_check(card.strip())
+            with st.spinner(f"{card}"):
+                result = checker.card_check(card.strip())
             logger.log_to_db(result)
             with st.expander(label=f"{result['label'].capitalize()}"):
                 col1, col2 = st.columns([0.7, 0.3])
