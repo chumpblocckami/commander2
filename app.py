@@ -35,13 +35,14 @@ if manual_inserting_button:
     if not cards:
         st.error("Please enter some cards!")
     if cards:
+        progress_bar = st.progress(0, text="Progress...")
         parsed_cards = [
             card.strip()
             for card in cards.split("\n")
             if card.strip() is not None and len(card) > 1
         ]
-        for card in parsed_cards:
-            with st.spinner(f"{card}"):
+        for progress, card in enumerate(parsed_cards):
+            with st.spinner(f"Getting details of {card}"):
                 result = checker.card_check(card.strip())
             logger.log_to_db(result)
             with st.expander(label=f"{result['label'].capitalize()}"):
@@ -52,6 +53,11 @@ if manual_inserting_button:
                 with col2:
                     for title, resources in result["resources"].items():
                         st.image(resources, caption=card.strip())
+            percentage = int(100 / len(parsed_cards) * (progress + 1))
+            progress_bar.progress(
+                percentage,
+                text=f"Progress {percentage} ({progress}/{len(parsed_cards)})",
+            )
 
 st.divider()
 with st.expander(label="Recent searched cards"):
